@@ -14,6 +14,6 @@ class NoteGenerationRequest(BaseModel):
 class GeneratedNote(BaseModel):
     """AI-produced note draft: summary plus tags for implicit linking."""
 
-    title: str
-    content: str
-    tags: list[str] = Field(default_factory=list)
+    title: str = Field(min_length=1)
+    content: str = Field(min_length=1)
+    tags: list[str] = Field(default_factory=list, min_length=1, max_length=8)

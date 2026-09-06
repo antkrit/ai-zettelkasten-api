@@ -1,15 +1,28 @@
-from collections.abc import Callable
+from enum import StrEnum
 
-from zettelkasten.providers import AIProvider, MockAIProvider
-
-# Swap this callable to inject a real provider later
-_ai_provider_factory: Callable[[], AIProvider] = MockAIProvider
+from zettelkasten.api.config import settings
+from zettelkasten.providers import AIProvider, DeepSeekProvider, MockAIProvider
 
 
-def get_ai_provider() -> AIProvider:
-    return _ai_provider_factory()
+class AIProviderName(StrEnum):
+    DEEPSEEK = "deepseek"
+    MOCK = "mock"
 
 
-def set_ai_provider_factory(factory: Callable[[], AIProvider]) -> None:
-    global _ai_provider_factory
-    _ai_provider_factory = factory
+class AIProviderFactory:
+    """Build concrete AIProvider instances from an allowlisted name."""
+
+    def __init__(self, model: AIProviderName =AIProviderName.DEEPSEEK) -> None:
+        self.model = model
+
+    def __call__(self) -> AIProvider:
+        match self.model:
+            case AIProviderName.DEEPSEEK:
+                return DeepSeekProvider(
+                    api_key=settings.deepseek.api_key,
+                    model=settings.deepseek.api_model,
+                )
+            case AIProviderName.MOCK:
+                return MockAIProvider()
+            case _:
+                raise ValueError(f"Unsupported AI provider: {self.model!r}")
