@@ -14,7 +14,7 @@ Return a JSON object only. Do not use markdown fences or any text outside the JS
 Schema:
 {
   "title": "concise title expressing the main idea",
-  "content": "self-contained explanation of the idea in markdown",
+  "content": "self-contained explanation of the idea",
   "tags": ["lowercase", "concise", "topic", "tags"]
 }
 

@@ -1,6 +1,11 @@
 from enum import StrEnum
 
 from zettelkasten.api.config import settings
+from zettelkasten.clients import (
+    KnowledgeBaseClient,
+    MockKnowledgeBaseClient,
+    NotionClient,
+)
 from zettelkasten.providers import AIProvider, DeepSeekProvider, MockAIProvider
 
 
@@ -9,10 +14,15 @@ class AIProviderName(StrEnum):
     MOCK = "mock"
 
 
+class KnowledgeBaseClientName(StrEnum):
+    NOTION = "notion"
+    MOCK = "mock"
+
+
 class AIProviderFactory:
     """Build concrete AIProvider instances from an allowlisted name."""
 
-    def __init__(self, model: AIProviderName =AIProviderName.DEEPSEEK) -> None:
+    def __init__(self, model: AIProviderName = AIProviderName.DEEPSEEK) -> None:
         self.model = model
 
     def __call__(self) -> AIProvider:
@@ -26,3 +36,26 @@ class AIProviderFactory:
                 return MockAIProvider()
             case _:
                 raise ValueError(f"Unsupported AI provider: {self.model!r}")
+
+
+class KnowledgeBaseClientFactory:
+    """Build concrete KnowledgeBaseClient instances from an allowlisted name."""
+
+    def __init__(
+        self, backend: KnowledgeBaseClientName = KnowledgeBaseClientName.NOTION
+    ) -> None:
+        self.backend = backend
+
+    def __call__(self) -> KnowledgeBaseClient:
+        match self.backend:
+            case KnowledgeBaseClientName.NOTION:
+                return NotionClient(
+                    api_key=settings.notion.api_key,
+                    database_id=settings.notion.database_id,
+                    title_property=settings.notion.title_property,
+                    tags_property=settings.notion.tags_property,
+                )
+            case KnowledgeBaseClientName.MOCK:
+                return MockKnowledgeBaseClient()
+            case _:
+                raise ValueError(f"Unsupported knowledge base client: {self.backend!r}")

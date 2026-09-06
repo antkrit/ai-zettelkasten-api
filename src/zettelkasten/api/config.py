@@ -25,6 +25,22 @@ class DeepSeekSettings(BaseSettings):
         return self
 
 
+class NotionSettings(BaseSettings):
+    """Notion integration settings (`NOTION_*` env vars)."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        env_prefix="NOTION_",
+        extra="ignore",
+    )
+
+    api_key: str = ""
+    database_id: str = ""
+    title_property: str = "Name"
+    tags_property: str = "Tags"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -34,6 +50,7 @@ class Settings(BaseSettings):
 
     allowed_origins: list[str] = ["http://localhost"]
     deepseek: DeepSeekSettings = Field(default_factory=DeepSeekSettings)
+    notion: NotionSettings = Field(default_factory=NotionSettings)
 
 
 settings = Settings()
