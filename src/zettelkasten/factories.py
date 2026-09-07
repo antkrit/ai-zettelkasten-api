@@ -1,22 +1,11 @@
-from enum import StrEnum
-
-from zettelkasten.api.config import settings
 from zettelkasten.clients import (
     KnowledgeBaseClient,
     MockKnowledgeBaseClient,
     NotionClient,
 )
+from zettelkasten.config import settings
+from zettelkasten.models.job import AIProviderName, KnowledgeBaseClientName
 from zettelkasten.providers import AIProvider, DeepSeekProvider, MockAIProvider
-
-
-class AIProviderName(StrEnum):
-    DEEPSEEK = "deepseek"
-    MOCK = "mock"
-
-
-class KnowledgeBaseClientName(StrEnum):
-    NOTION = "notion"
-    MOCK = "mock"
 
 
 class AIProviderFactory:

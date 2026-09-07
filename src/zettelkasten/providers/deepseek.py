@@ -35,6 +35,8 @@ class DeepSeekProvider(AIProvider):
     """AIProvider backed by the DeepSeek chat completions API."""
 
     def __init__(self, api_key: str, *, model: str = "deepseek-chat") -> None:
+        if not api_key:
+            raise ValueError("DeepSeek api_key is required")
         self._client = DeepSeekAPI(api_key)
         self._model = model
 

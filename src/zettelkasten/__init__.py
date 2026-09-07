@@ -5,17 +5,27 @@ from zettelkasten.clients import (
     MockKnowledgeBaseClient,
     NotionClient,
 )
-from zettelkasten.models import GeneratedNote, Note, NoteGenerationRequest
+from zettelkasten.models import (
+    AIProviderName,
+    GeneratedNote,
+    KnowledgeBaseClientName,
+    Note,
+    NoteGenerationRequest,
+    NoteJob,
+)
 from zettelkasten.providers import AIProvider, DeepSeekProvider, MockAIProvider
 
 __all__ = [
     "AIProvider",
+    "AIProviderName",
     "DeepSeekProvider",
     "GeneratedNote",
     "KnowledgeBaseClient",
+    "KnowledgeBaseClientName",
     "MockAIProvider",
     "MockKnowledgeBaseClient",
     "Note",
     "NoteGenerationRequest",
+    "NoteJob",
     "NotionClient",
 ]

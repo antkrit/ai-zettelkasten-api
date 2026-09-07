@@ -1,6 +1,4 @@
-from typing import Self
-
-from pydantic import Field, model_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,12 +15,6 @@ class DeepSeekSettings(BaseSettings):
     api_key: str = ""
     api_url: str = "https://api.deepseek.com"
     api_model: str = "deepseek-v4-pro"
-
-    @model_validator(mode="after")
-    def _require_api_key(self) -> Self:
-        if not self.api_key:
-            raise ValueError("DEEPSEEK_API_KEY is required")
-        return self
 
 
 class NotionSettings(BaseSettings):
@@ -41,6 +33,20 @@ class NotionSettings(BaseSettings):
     tags_property: str = "Tags"
 
 
+class AwsSettings(BaseSettings):
+    """AWS settings for SQS (`AWS_*` env vars)."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        env_prefix="AWS_",
+        extra="ignore",
+    )
+
+    region: str = "eu-central-1"
+    notes_queue_url: str = ""
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -48,9 +54,9 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    allowed_origins: list[str] = ["http://localhost"]
     deepseek: DeepSeekSettings = Field(default_factory=DeepSeekSettings)
     notion: NotionSettings = Field(default_factory=NotionSettings)
+    aws: AwsSettings = Field(default_factory=AwsSettings)
 
 
 settings = Settings()

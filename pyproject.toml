@@ -5,12 +5,11 @@ description = "AI-powered Zettelkasten API"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "boto3>=1.43.89",
     "deepseek>=1.0.0",
-    "fastapi[standard,standart]>=0.141.1",
     "notion-client>=3.1.0",
     "pydantic>=2.13.5",
     "pydantic-settings>=2.15.0",
-    "uvicorn>=0.52.4",
 ]
 
 [build-system]
@@ -19,9 +18,9 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28.1",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
     "ruff>=0.16.6",
     "ty>=0.0.78",
+    "types-boto3>=1.43.89",
 ]

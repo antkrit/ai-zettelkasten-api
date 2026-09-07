@@ -32,11 +32,14 @@ class NotionClient(KnowledgeBaseClient):
         response = await self._client.pages.create(
             parent={"database_id": self.database_id},
             properties=self._properties(note),
-            children=self._content_blocks(note.content),
         )
         page_id = response["id"]
         if not isinstance(page_id, str):
             raise TypeError(f"Unexpected Notion page id type: {type(page_id)!r}")
+
+        blocks = self._content_blocks(note.content)
+        if blocks:
+            await self._client.blocks.children.append(page_id, children=blocks)
 
         return Note(
             title=note.title,
