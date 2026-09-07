@@ -51,7 +51,9 @@ class NotionClient(KnowledgeBaseClient):
     def _properties(self, note: GeneratedNote) -> dict:
         return {
             self.title_property: {
-                "title": [{"type": "text", "text": {"content": note.title[:_MAX_RICH_TEXT]}}],
+                "title": [
+                    {"type": "text", "text": {"content": note.title[:_MAX_RICH_TEXT]}}
+                ],
             },
             self.tags_property: {
                 "multi_select": [{"name": tag} for tag in note.tags],

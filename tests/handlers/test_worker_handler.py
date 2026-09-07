@@ -11,9 +11,7 @@ def _sqs_event(*bodies: str | dict, message_ids: list[str] | None = None) -> dic
     records = []
     for index, body in enumerate(bodies):
         message_id = (
-            message_ids[index]
-            if message_ids is not None
-            else f"msg-{index + 1}"
+            message_ids[index] if message_ids is not None else f"msg-{index + 1}"
         )
         records.append(
             {

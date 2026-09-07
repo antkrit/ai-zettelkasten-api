@@ -1,6 +1,9 @@
 import base64
+import binascii
 import json
 from typing import Any
+
+from pydantic import ValidationError
 
 from zettelkasten.models.job import NoteJob
 from zettelkasten.services.sqs import enqueue_note_job
@@ -11,7 +14,14 @@ def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     try:
         job = NoteJob.model_validate(_extract_json_body(event))
         message_id = enqueue_note_job(job)
-    except Exception as exc:
+    except (
+        ValidationError,
+        ValueError,
+        TypeError,
+        json.JSONDecodeError,
+        UnicodeDecodeError,
+        binascii.Error,
+    ) as exc:
         return _response(400, {"error": str(exc)})
 
     return _response(202, {"status": "accepted", "message_id": message_id})

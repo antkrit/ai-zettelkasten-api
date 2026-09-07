@@ -54,15 +54,15 @@ class DeepSeekProvider(AIProvider):
             response_format={"type": "json_object"},
         )
         if not isinstance(result, str):
-            raise TypeError(f"Expected str from DeepSeek chat_completion, got {type(result)!r}")
+            raise TypeError(
+                f"Expected str from DeepSeek chat_completion, got {type(result)!r}"
+            )
         return result
 
     def _parse(self, raw: str) -> GeneratedNote:
         try:
             data = json.loads(raw)
         except json.JSONDecodeError as exc:
-            raise ValueError(
-                f"DeepSeek returned invalid JSON: {raw[:500]!r}"
-            ) from exc
+            raise ValueError(f"DeepSeek returned invalid JSON: {raw[:500]!r}") from exc
 
         return GeneratedNote.model_validate(data)
